@@ -1,9 +1,9 @@
-create or replace FUNCTION `numero_extenso`(`n` DECIMAL(10,2)) RETURNS varchar(150) CHARSET latin1
+create FUNCTION `numero_extenso`(`n` DECIMAL(10,2)) RETURNS varchar(1000) CHARSET latin1
 BEGIN
-    declare ans varchar(150);
+    declare ans varchar(1000);
     declare dig1, dig2, dig3, dig4, dig5, dig6, dig7, dig8 int;
 
-DECLARE num1,num2 varchar(150);
+DECLARE num1,num2 varchar(1000);
 set ans = '';
 IF n != '' THEN  
 
@@ -197,13 +197,19 @@ else
         end case;
     end if;
 end if;
+if((dig8 > 0 or dig7 > 0 or dig6 > 0 or dig5 > 0 or dig4 > 0 or dig3 > 0 or dig2 > 0 or dig1 > 0) and dig1 > 1) then 
 set ans=concat(ans, ' Reais');
+else if((dig8 > 0 or dig7 > 0 or dig6 > 0 or dig5 > 0 or dig4 > 0 or dig3 > 0 or dig2 > 0) = false and dig1 = 1) then 
+set ans=concat(ans, ' Real');
+end if;
+end if;
 end if;
 IF num2 > 0 then
+    if(dig8 > 0 or dig7 > 0 or dig6 > 0 or dig5 > 0 or dig4 > 0 or dig3 > 0 or dig2 > 0 or dig1 > 0) then
+    set ans=concat(ans, ' e');
+    end if;
     set dig2 = CAST(RIGHT(CAST(floor(num2 / 10) as CHAR(8)), 1) as SIGNED);
     set dig1 = CAST(RIGHT(floor(num2), 1) as SIGNED);
-    set ans=concat(ans, ' e');
-   
    if dig2 = 1 then
 	    case
 	        when concat(dig2,dig1) = 10 then set ans=concat(ans, ' Dez');
